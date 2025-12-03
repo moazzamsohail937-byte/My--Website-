@@ -3,429 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Moazzam All-in-One Tools - Free online utilities including PDF converter, QR Code Generator, Password Maker, and Unit Converter.">
-    <title>Moazzam All-in-One Tools - Free Utilities</title>
+    <meta name="description" content="Moazzam All-in-One Tools - Free Internet Speed Test, Image to PDF, Compressor, QR Code, and more.">
+    <title>Moazzam All-in-One Tools - Full Version</title>
     
-    <!-- QR Code Library -->
+    <!-- LIBRARIES (CDNs) - Internet chahiye load hone ke liye -->
+    <!-- QR Code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
+    <!-- PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Image Compression -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
     <style>
         :root {
-            --primary: #0056b3; /* Thoda dark blue professional look ke liye */
-            --secondary: #004494;
-            --accent: #ff9800; /* Buttons ke liye thoda contrast */
-            --bg: #f4f7f6;
+            --primary: #0066cc;
+            --secondary: #004c99;
+            --bg: #f0f2f5;
             --card: #ffffff;
-            --text: #333333;
+            --text: #2d3436;
+            --success: #00b894;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--bg);
             color: var(--text);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            padding-bottom: 50px;
         }
 
-        /* Header Branding */
+        /* HEADER */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 2rem 1rem;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+        header h1 { margin: 0; font-size: 2.2rem; }
+        header p { opacity: 0.9; margin-top: 5px; }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 1px;
-        }
-
-        header p {
-            margin-top: 10px;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Navigation */
+        /* NAVIGATION */
         nav {
             display: flex;
             justify-content: center;
             background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            padding: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             flex-wrap: wrap;
+            gap: 10px;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         nav button {
             border: none;
-            background: none;
-            padding: 12px 20px;
-            font-size: 16px;
+            background: #eef2f7;
+            padding: 10px 18px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
-            color: #666;
+            color: #555;
             transition: 0.3s;
-            margin: 0 5px;
-            border-radius: 5px;
+            font-size: 0.9rem;
         }
 
-        nav button:hover {
-            background-color: #eef2ff;
-            color: var(--primary);
-        }
-
-        nav button.active {
+        nav button:hover, nav button.active {
             background-color: var(--primary);
             color: white;
+            transform: translateY(-2px);
         }
 
-        /* Main Container */
+        /* CONTAINER */
         .container {
-            max-width: 900px;
+            max-width: 850px;
             margin: 2rem auto;
             padding: 0 15px;
-            flex: 1; /* Pushes footer down */
         }
 
         .tool-section {
             display: none;
             background: var(--card);
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.4s;
         }
+        .tool-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .tool-section.active {
-            display: block;
-        }
+        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-top: 0; }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2 { 
-            color: var(--primary);
-            border-bottom: 2px solid #f0f0f0; 
-            padding-bottom: 15px; 
-            margin-top: 0;
-        }
-
-        /* Inputs & Buttons */
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        
-        input, select, textarea {
+        /* FORMS */
+        input[type="text"], input[type="number"], input[type="file"], textarea, select {
             width: 100%;
             padding: 12px;
-            margin: 8px 0 20px 0;
+            margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 16px;
         }
 
-        input:focus { outline: 2px solid var(--primary); border-color: transparent; }
-
         button.action-btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px 28px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 17px;
+            padding: 14px;
             width: 100%;
+            border-radius: 6px;
+            font-size: 16px;
             font-weight: bold;
-            transition: transform 0.1s;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
         }
+        button.action-btn:hover { background-color: var(--secondary); }
+        button.action-btn:disabled { background-color: #ccc; cursor: not-allowed; }
 
-        button.action-btn:hover {
-            background-color: var(--secondary);
-            transform: translateY(-2px);
-        }
-
-        /* Specific Tool Styles */
-        #qrcode {
-            margin-top: 25px;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            background: #fff;
-            border: 1px dashed #ccc;
-        }
-
+        /* SPECIFIC TOOLS */
         .result-box {
             background: #e8f5e9;
-            color: #2e7d32;
-            padding: 20px;
+            color: #2d3436;
+            padding: 15px;
             margin-top: 20px;
             border-radius: 6px;
-            border-left: 5px solid #2e7d32;
-            font-family: monospace;
-            word-break: break-all;
+            border-left: 5px solid var(--success);
             display: none;
-            font-size: 1.2rem;
-            text-align: center;
+            word-wrap: break-word;
         }
 
-        /* Home Page Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            margin-top: 25px;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #eee;
-            transition: 0.3s;
-            cursor: pointer;
-        }
+        /* Speed Test Styles */
+        .gauge-container { text-align: center; margin: 20px 0; }
+        .speed-value { font-size: 3rem; font-weight: bold; color: var(--primary); }
+        .speed-unit { font-size: 1rem; color: #777; }
 
-        .feature-card:hover {
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-color: var(--primary);
+        /* Dashboard Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { 
+            background: white; padding: 20px; border-radius: 10px; text-align: center; 
+            border: 1px solid #eee; cursor: pointer; transition: 0.3s;
         }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .card-icon { font-size: 30px; display: block; margin-bottom: 10px; }
 
-        .feature-icon { font-size: 40px; margin-bottom: 10px; display: block; }
-
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-        }
-        
-        footer p { margin: 5px 0; font-size: 0.9rem; }
-
+        footer { text-align: center; margin-top: 50px; color: #888; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Moazzam All-in-One Tools</h1>
-    <p>Smart Tools for Smart People • Fast, Free & Secure</p>
+    <p>Every Tool You Need. Fast, Free & Live.</p>
 </header>
 
 <nav>
-    <button onclick="showTool('home')" class="active">Home</button>
-    <button onclick="showTool('password')">Password Gen</button>
-    <button onclick="showTool('qr')">QR Generator</button>
-    <button onclick="showTool('converter')">Unit Converter</button>
-    <button onclick="showTool('comingsoon')">More Tools</button>
+    <button onclick="show('home')" class="active">🏠 Home</button>
+    <button onclick="show('speedtest')">🚀 Speed Test</button>
+    <button onclick="show('img2pdf')">📄 Img to PDF</button>
+    <button onclick="show('compressor')">🗜️ Compressor</button>
+    <button onclick="show('qrcode')">📱 QR Code</button>
+    <button onclick="show('password')">🔐 Password</button>
+    <button onclick="show('wordcount')">📝 Word Count</button>
 </nav>
 
 <div class="container">
 
-    <!-- HOME PAGE -->
+    <!-- HOME DASHBOARD -->
     <div id="home" class="tool-section active">
-        <h2>Welcome to Moazzam's Toolkit</h2>
-        <p>This platform provides free daily utility tools designed to make your work easier. No signup required.</p>
-        
-        <div class="features-grid">
-            <div class="feature-card" onclick="showTool('password')">
-                <span class="feature-icon">🔒</span>
-                <h3>Secure Password</h3>
-                <p>Create strong passwords instantly.</p>
-            </div>
-            <div class="feature-card" onclick="showTool('qr')">
-                <span class="feature-icon">📱</span>
-                <h3>QR Code Maker</h3>
-                <p>Convert text or links to QR.</p>
-            </div>
-            <div class="feature-card" onclick="showTool('converter')">
-                <span class="feature-icon">⚖️</span>
-                <h3>Unit Converter</h3>
-                <p>Length, Weight, and more.</p>
-            </div>
-            <div class="feature-card" onclick="showTool('comingsoon')">
-                <span class="feature-icon">📄</span>
-                <h3>PDF Tools</h3>
-                <p>Convert and Compress (Coming Soon).</p>
-            </div>
+        <h2>Select a Tool</h2>
+        <div class="grid">
+            <div class="card" onclick="show('speedtest')"><span class="card-icon">🚀</span>Internet Speed</div>
+            <div class="card" onclick="show('img2pdf')"><span class="card-icon">📄</span>Image to PDF</div>
+            <div class="card" onclick="show('compressor')"><span class="card-icon">🗜️</span>Img Compressor</div>
+            <div class="card" onclick="show('qrcode')"><span class="card-icon">📱</span>QR Generator</div>
+            <div class="card" onclick="show('password')"><span class="card-icon">🔐</span>Password Gen</div>
+            <div class="card" onclick="show('converter')"><span class="card-icon">⚖️</span>Unit Converter</div>
+            <div class="card" onclick="show('wordcount')"><span class="card-icon">📝</span>Word Counter</div>
         </div>
     </div>
 
-    <!-- PASSWORD GENERATOR -->
-    <div id="password" class="tool-section">
-        <h2>🔐 Strong Password Generator</h2>
-        <p>Generate secure passwords to keep your accounts safe.</p>
+    <!-- 1. INTERNET SPEED TEST -->
+    <div id="speedtest" class="tool-section">
+        <h2>🚀 Internet Speed Test</h2>
+        <p>Check your WiFi or Mobile Data download speed instantly.</p>
         
-        <label>Password Length: <span id="lenVal" style="color:var(--primary); font-weight:bold;">12</span></label>
-        <input type="range" min="6" max="32" value="12" oninput="document.getElementById('lenVal').innerText = this.value" id="passLength">
-        
-        <div style="display:flex; gap:20px; margin-bottom:20px;">
-            <label style="cursor:pointer;"><input type="checkbox" id="includeSym" checked> Include Symbols (@#$)</label>
-            <label style="cursor:pointer;"><input type="checkbox" id="includeNum" checked> Include Numbers (123)</label>
+        <div class="gauge-container">
+            <div id="speedDisplay" class="speed-value">0.0</div>
+            <div class="speed-unit">Mbps</div>
+            <p id="speedStatus" style="color:#666; margin-top:10px;">Ready to start...</p>
         </div>
 
-        <button class="action-btn" onclick="generatePassword()">Generate New Password</button>
-        <div id="passResult" class="result-box" onclick="copyText(this)"></div>
-        <p style="text-align:center; font-size:12px; color:#888; margin-top:5px;">Click on the password to copy</p>
+        <button class="action-btn" onclick="runSpeedTest()">Start Speed Test</button>
     </div>
 
-    <!-- QR CODE GENERATOR -->
-    <div id="qr" class="tool-section">
+    <!-- 2. IMAGE TO PDF -->
+    <div id="img2pdf" class="tool-section">
+        <h2>📄 Image to PDF Converter</h2>
+        <p>Convert JPG/PNG images to PDF document. (Client-side, Private).</p>
+        
+        <input type="file" id="pdfImageInput" accept="image/*">
+        <button class="action-btn" onclick="convertImgToPdf()">Download PDF</button>
+        <div id="pdfResult" class="result-box">PDF Generated! Downloading...</div>
+    </div>
+
+    <!-- 3. IMAGE COMPRESSOR -->
+    <div id="compressor" class="tool-section">
+        <h2>🗜️ Image Compressor</h2>
+        <p>Reduce image size (MB to KB) without uploading to server.</p>
+        
+        <input type="file" id="compressInput" accept="image/*">
+        <div style="margin: 10px 0;">
+            <label>Quality (0.1 = Low, 1.0 = High)</label>
+            <input type="range" id="compQuality" min="0.1" max="1.0" step="0.1" value="0.6">
+        </div>
+        <button class="action-btn" onclick="compressImage()">Compress & Download</button>
+        <div id="compResult" class="result-box"></div>
+    </div>
+
+    <!-- 4. QR CODE -->
+    <div id="qrcode" class="tool-section">
         <h2>📱 QR Code Generator</h2>
-        <p>Enter any URL or Text to get your QR Code instantly.</p>
-        
-        <input type="text" id="qrText" placeholder="Example: www.moazzam-tools.com">
-        <button class="action-btn" onclick="generateQR()">Create QR Code</button>
-        <div id="qrcode"></div>
+        <input type="text" id="qrInput" placeholder="Enter Website URL or Text">
+        <button class="action-btn" onclick="makeQR()">Generate QR</button>
+        <div id="qrPlaceholder" style="margin-top:20px; display:flex; justify-content:center;"></div>
     </div>
 
-    <!-- UNIT CONVERTER -->
+    <!-- 5. PASSWORD GENERATOR -->
+    <div id="password" class="tool-section">
+        <h2>🔐 Password Generator</h2>
+        <input type="range" id="passLen" min="8" max="30" value="12" oninput="document.getElementById('lenTxt').innerText=this.value">
+        <p>Length: <span id="lenTxt">12</span></p>
+        <button class="action-btn" onclick="genPass()">Generate Password</button>
+        <div id="passBox" class="result-box" onclick="navigator.clipboard.writeText(this.innerText); alert('Copied!')" style="cursor:pointer;"></div>
+        <small>Click password to copy</small>
+    </div>
+
+    <!-- 6. WORD COUNTER -->
+    <div id="wordcount" class="tool-section">
+        <h2>📝 Word & Character Counter</h2>
+        <textarea id="wordInput" rows="6" placeholder="Paste your text here..." oninput="countWords()"></textarea>
+        <div style="display:flex; gap:20px; font-weight:bold; font-size:1.2rem; color:var(--primary);">
+            <span>Words: <span id="wCount">0</span></span>
+            <span>Characters: <span id="cCount">0</span></span>
+        </div>
+    </div>
+
+    <!-- 7. UNIT CONVERTER (Hidden in menu, accessible via home) -->
     <div id="converter" class="tool-section">
-        <h2>⚖️ Unit Converter (Length)</h2>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-            <div>
-                <label>From:</label>
-                <input type="number" id="inputVal" placeholder="0">
-                <select id="inputUnit">
-                    <option value="meter">Meter (m)</option>
-                    <option value="kilometer">Kilometer (km)</option>
-                    <option value="foot">Foot (ft)</option>
-                    <option value="inch">Inch (in)</option>
-                </select>
-            </div>
-            <div>
-                <label>To:</label>
-                <input type="text" id="outputVal" placeholder="Result" readonly style="background:#f9f9f9;">
-                <select id="outputUnit">
-                    <option value="meter">Meter (m)</option>
-                    <option value="kilometer">Kilometer (km)</option>
-                    <option value="foot">Foot (ft)</option>
-                    <option value="inch">Inch (in)</option>
-                </select>
-            </div>
-        </div>
-        
-        <button class="action-btn" onclick="convertUnit()">Convert Now</button>
-    </div>
-
-    <!-- COMING SOON / PDF PLACEHOLDER -->
-    <div id="comingsoon" class="tool-section">
-        <h2>🚀 Advanced Tools (Coming Soon)</h2>
-        <p>We are working on adding server-side tools. Stay tuned for:</p>
-        <ul style="line-height:1.8;">
-            <li><strong>PDF to Word Converter</strong> - Convert documents easily.</li>
-            <li><strong>Image Compressor</strong> - Reduce image size without losing quality.</li>
-            <li><strong>Resume Builder</strong> - Create professional CVs in minutes.</li>
-        </ul>
-        <div style="background:#eef2ff; padding:20px; border-radius:8px; margin-top:20px; text-align:center;">
-            <p><strong>Moazzam All-in-One Tools</strong> is constantly updating.</p>
-        </div>
+        <h2>⚖️ Unit Converter</h2>
+        <input type="number" id="uInput" placeholder="Value">
+        <select id="uFrom"><option value="m">Meter</option><option value="ft">Foot</option><option value="km">Km</option></select>
+        <p style="text-align:center">TO</p>
+        <select id="uTo"><option value="ft">Foot</option><option value="m">Meter</option><option value="km">Km</option></select>
+        <button class="action-btn" onclick="convertU()">Convert</button>
+        <div id="uResult" class="result-box"></div>
     </div>
 
 </div>
 
 <footer>
-    <p>&copy; 2025 Moazzam All-in-One Tools. All rights reserved.</p>
-    <p>Privacy Policy | Terms of Use | Contact</p>
+    &copy; 2025 Moazzam Tools. All tools run locally in your browser.
 </footer>
 
+<!-- JAVASCRIPT LOGIC -->
 <script>
-    // Navigation Logic
-    function showTool(toolId) {
-        document.querySelectorAll('.tool-section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
-        
-        document.getElementById(toolId).classList.add('active');
-        
-        // Find the button that calls this function and make it active
-        // (Simple loop to match button text or onclick logic)
-        const buttons = document.querySelectorAll('nav button');
-        buttons.forEach(btn => {
-            if(btn.getAttribute('onclick').includes(toolId)) {
-                btn.classList.add('active');
-            }
-        });
+    // Navigation
+    function show(id) {
+        document.querySelectorAll('.tool-section').forEach(d => d.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active'); // Note: Works best when clicked directly
     }
 
-    // --- Password Generator Logic ---
-    function generatePassword() {
-        const length = document.getElementById('passLength').value;
-        const includeSym = document.getElementById('includeSym').checked;
-        const includeNum = document.getElementById('includeNum').checked;
+    // --- 1. Speed Test (Simulation using Image Download) ---
+    function runSpeedTest() {
+        const display = document.getElementById('speedDisplay');
+        const status = document.getElementById('speedStatus');
+        status.innerText = "Testing download speed...";
+        display.innerText = "0.0";
         
-        let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        if (includeNum) charset += "0123456789";
-        if (includeSym) charset += "!@#$%^&*()_+";
+        const imageAddr = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"; // Approx 1MB image
+        const downloadSize = 1000000; // ~1MB in bytes (Approximation)
+        const startTime = (new Date()).getTime();
+        const cacheBuster = "?nnn=" + startTime;
         
-        let retVal = "";
-        for (let i = 0, n = charset.length; i < length; ++i) {
-            retVal += charset.charAt(Math.floor(Math.random() * n));
+        const download = new Image();
+        download.onload = function () {
+            const endTime = (new Date()).getTime();
+            const duration = (endTime - startTime) / 1000; // seconds
+            const bitsLoaded = downloadSize * 8;
+            const speedBps = bitsLoaded / duration;
+            const speedMbps = (speedBps / 1024 / 1024).toFixed(2);
+            
+            display.innerText = speedMbps;
+            status.innerText = "Test Complete!";
         }
         
-        const resBox = document.getElementById('passResult');
-        resBox.style.display = 'block';
-        resBox.innerText = retVal;
-    }
-
-    function copyText(element) {
-        navigator.clipboard.writeText(element.innerText);
-        alert("Password Copied!");
-    }
-
-    // --- QR Code Logic ---
-    function generateQR() {
-        const text = document.getElementById('qrText').value;
-        const container = document.getElementById('qrcode');
-        container.innerHTML = ""; 
-        if(text.trim() === "") return alert("Please enter text or URL");
+        download.onerror = function () {
+            status.innerText = "Error connecting. Check internet.";
+        }
         
-        new QRCode(container, {
-            text: text,
-            width: 150,
-            height: 150,
-            colorDark : "#0056b3", // Moazzam Blue color
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
+        download.src = imageAddr + cacheBuster;
     }
 
-    // --- Unit Converter Logic ---
-    function convertUnit() {
-        const val = parseFloat(document.getElementById('inputVal').value);
-        const inUnit = document.getElementById('inputUnit').value;
-        const outUnit = document.getElementById('outputUnit').value;
+    // --- 2. Image to PDF ---
+    async function convertImgToPdf() {
+        const { jsPDF } = window.jspdf;
+        const input = document.getElementById('pdfImageInput');
         
+        if (input.files.length === 0) {
+            alert("Please select an image first!");
+            return;
+        }
+
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const imgData = event.target.result;
+            const doc = new jsPDF();
+            // Add image to PDF (x, y, width, height)
+            // A4 size is roughly 210 x 297 mm
+            doc.addImage(imgData, 'JPEG', 10, 10, 190, 0); 
+            doc.save("moazzam-document.pdf");
+            document.getElementById('pdfResult').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // --- 3. Image Compressor ---
+    async function compressImage() {
+        const fileInput = document.getElementById('compressInput');
+        const quality = document.getElementById('compQuality').value;
+        const resultBox = document.getElementById('compResult');
+
+        if (fileInput.files.length === 0) return alert("Select an image!");
+
+        const imageFile = fileInput.files[0];
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+            initialQuality: parseFloat(quality)
+        };
+
+        try {
+            resultBox.style.display = 'block';
+            resultBox.innerText = "Compressing...";
+            
+            const compressedFile = await imageCompression(imageFile, options);
+            
+            // Create Download Link
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(compressedFile);
+            link.download = `compressed-${imageFile.name}`;
+            link.innerText = "Download Compressed Image";
+            link.style.fontWeight = "bold";
+            
+            resultBox.innerHTML = `Original: ${(imageFile.size/1024).toFixed(1)}KB <br> 
+                                   Compressed: <b style='color:green'>${(compressedFile.size/1024).toFixed(1)}KB</b><br><br>`;
+            resultBox.appendChild(link);
+            
+        } catch (error) {
+            console.log(error);
+            resultBox.innerText = "Error compressing image.";
+        }
+    }
+
+    // --- 4. QR Code ---
+    function makeQR() {
+        const txt = document.getElementById('qrInput').value;
+        const place = document.getElementById('qrPlaceholder');
+        place.innerHTML = "";
+        if(!txt) return alert("Enter text!");
+        new QRCode(place, { text: txt, width: 150, height: 150 });
+    }
+
+    // --- 5. Password ---
+    function genPass() {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        const len = document.getElementById('passLen').value;
+        let pass = "";
+        for(let i=0; i<len; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+        const box = document.getElementById('passBox');
+        box.style.display = 'block';
+        box.innerText = pass;
+    }
+
+    // --- 6. Word Counter ---
+    function countWords() {
+        const txt = document.getElementById('wordInput').value;
+        const charCount = txt.length;
+        // Split by whitespace and filter empty strings
+        const wordCount = txt.trim().split(/\s+/).filter(word => word.length > 0).length;
+        
+        document.getElementById('wCount').innerText = wordCount;
+        document.getElementById('cCount').innerText = charCount;
+    }
+
+    // --- 7. Unit Converter ---
+    function convertU() {
+        const val = parseFloat(document.getElementById('uInput').value);
+        const f = document.getElementById('uFrom').value;
+        const t = document.getElementById('uTo').value;
         if(isNaN(val)) return;
-
-        // Base unit is Meter
-        let meters = 0;
-        if(inUnit === 'meter') meters = val;
-        if(inUnit === 'kilometer') meters = val * 1000;
-        if(inUnit === 'foot') meters = val / 3.28084;
-        if(inUnit === 'inch') meters = val / 39.3701;
-
-        // Convert meters to output
-        let result = 0;
-        if(outUnit === 'meter') result = meters;
-        if(outUnit === 'kilometer') result = meters / 1000;
-        if(outUnit === 'foot') result = meters * 3.28084;
-        if(outUnit === 'inch') result = meters * 39.3701;
-
-        document.getElementById('outputVal').value = result.toFixed(4);
+        
+        // Convert to meters first
+        let m = 0;
+        if(f==='m') m=val; else if(f==='km') m=val*1000; else if(f==='ft') m=val/3.28084;
+        
+        // Meter to Target
+        let res = 0;
+        if(t==='m') res=m; else if(t==='km') res=m/1000; else if(t==='ft') res=m*3.28084;
+        
+        const rBox = document.getElementById('uResult');
+        rBox.style.display='block';
+        rBox.innerText = `${val} ${f} = ${res.toFixed(4)} ${t}`;
     }
-
 </script>
 
 </body>
-  </html>
+            </html>
